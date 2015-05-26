@@ -5,7 +5,8 @@ Created on May 08, 2015
 '''
 
 # Description: 
-# The goal is to show the growth of nighttime lights from 1992-2013, viewing only the growth, in cities over 50k in population in Bangladesh and 6DN.
+# The goal is to show the growth of nighttime lights from 1992-2013, viewing only the growth, in cities over 50k in population in Bangladesh. Only pixel values
+# > 6DN are considered.
 # Because methodologies differ in the satellite imagery classification, sometimes areas falsely show a decrease in urban lights from one year to another.
 # To correct for this, only areas of growth are considered between years. The extent of urban lights from 1992 for example will be passed to 1993 and 
 # only new lights will be viewed. A table showing the area of the extent of pixels (essentially the urban extent) is created. This table also contains 
