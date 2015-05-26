@@ -6,7 +6,7 @@ Created on May 08, 2015
 
 # Description: 
 # The goal is to show the growth of nighttime lights from 1992-2013, viewing only the growth, in cities over 50k in population in Bangladesh. Only pixel values
-# > 6DN are considered.
+# > 6DN are considered. Night light data can be downloaded here: http://ngdc.noaa.gov/eog/dmsp/downloadV4composites.html
 # Because methodologies differ in the satellite imagery classification, sometimes areas falsely show a decrease in urban lights from one year to another.
 # To correct for this, only areas of growth are considered between years. The extent of urban lights from 1992 for example will be passed to 1993 and 
 # only new lights will be viewed. A table showing the area of the extent of pixels (essentially the urban extent) is created. This table also contains 
@@ -94,11 +94,11 @@ def mosaicfunction():
     mergelist = [raster1992]
     #create list of all rasters
     raslist = arcpy.ListRasters()   
-    #there are rasters for dates 1992-2013, start count2 at 1993 (which also works as name), stop mosaicing when count2 reaches 2014   
+    #there are rasters for dates 1992-2013, start count at 1993 (which also works as name), stop mosaicing when count reaches 2014   
     while count < 2014:
         #set first raster to mosaic to the first raster in mergelist
         inras1 = filelist[2]+mergelist[mergeindex]
-        #set second raster to mosaic as county1 variable, which will be moved to next location in list each iteration
+        #set second raster to mosaic as county variable, which will be moved to next location in list each iteration
         inras2 = raslist[county]
         #add input rasters along with ";" separator due to finicky nature of "mosaic to new raster" tool 
         finalras = inras1+";"+inras2
@@ -134,7 +134,7 @@ def rastertopolydissolvejoin():
         name = str(count) + "_polygon.shp"
     
         # To start, first convert nighttime pixels to polygons so that the extent of connected pixels can be created for the whole country.
-        # Execute clip
+        # Execute raster to polygon 
         arcpy.RasterToPolygon_conversion(ras, filelist[3] + name, "NO_SIMPLIFY", "VALUE")
         #keep track of processing 
         print "\n Processing " + name + " complete. Finished converting " + ras + "to polygon"  
@@ -179,7 +179,7 @@ def zonalstats():
     polylist = arcpy.ListFeatureClasses()
     # create another file location for raster list
     env.workspace = filelist[2]
-    # create another raster list for different location 
+    # create raster list for different location 
     raslist = arcpy.ListRasters()
     # set variable names for keeping track of filename and polylist location 
     count = 1992
@@ -257,42 +257,47 @@ def addareafield():
 
 #####------Main------######
 
-#Call function to make new folders if necessary
-makefiles()
+def main():
+    #Call function to make new folders if necessary
+    makefiles()
 
-#Call function to set null the value of raster less than 6 
-setrastertonull()
+    #Call function to set null the value of raster less than 6 
+    setrastertonull()
 
-#Call function to copy raster to another file location for future use in mosaic function
-copyraster()
+    #Call function to copy raster to another file location for future use in mosaic function
+    copyraster()
 
-#Call function to mosaic previous years raster with current years to get the new added extent.
-mosaicfunction()
+    #Call function to mosaic previous years raster with current years to get the new added extent.
+    mosaicfunction()
 
-#Call function to convert raster to polygon, dissolve the multipart polygons into one piece, select polygons that intersect 
-#with cities, and do spatial join to get names of cities in polygon 
-rastertopolydissolvejoin()
+    #Call function to convert raster to polygon, dissolve the multipart polygons into one piece, select polygons that intersect 
+    #with cities, and do spatial join to get names of cities in polygon 
+    rastertopolydissolvejoin()
 
-#Call function to copy shapefile to folder number 7 in folderlist for future analysis
-copyshapefile(7)
+    #Call function to copy shapefile to folder number 7 in folderlist for future analysis
+    copyshapefile(7)
 
-#Call function to copy shapefile to folder number 8 in folderlist for future analysis
-copyshapefile(8)
+    #Call function to copy shapefile to folder number 8 in folderlist for future analysis
+    copyshapefile(8)
 
-# Call function to run Zonal Stats for every polygon to get sum of DNs of Nighttime lights
-zonalstats()
+    # Call function to run Zonal Stats for every polygon to get sum of DNs of Nighttime lights
+    zonalstats()
 
-#Call function to merge tables together and add to table in shapefile
-combinetables()
+    #Call function to merge tables together and add to table in shapefile
+    combinetables()
 
-#Call function to delete unnecessary fields of table
-deletefields()
+    #Call function to delete unnecessary fields of table
+    deletefields()
 
-#Call function to calculate the area of each urban extent/polygon.
-calculatearea()
+    #Call function to calculate the area of each urban extent/polygon.
+    calculatearea()
 
-#Call function to add the area field to the shapefile
-addareafield()
+    #Call function to add the area field to the shapefile
+    addareafield()
 
+#execute main if code is run
+if __name__ == "__main__": 
+    main()
+    
 #Print out time of finish and verify success of finish
 print (time.time() - start_time) / 60, "minutes, finished"
