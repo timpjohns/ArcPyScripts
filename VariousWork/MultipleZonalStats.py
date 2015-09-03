@@ -5,7 +5,7 @@ Created on Jul 17, 2015
 
 '''
 
-#multiple zonal stats on different rasters for the same districts for Xinshen in Ghana
+#multiple zonal stats on different rasters for the same districts in Ghana
 
 
 # Import system modules
