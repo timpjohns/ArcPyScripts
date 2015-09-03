@@ -128,7 +128,7 @@ def backwardadjustment():
     while count > 1991:
         #set first raster to mosaic to the first raster in mergelist
         inras1 = filelist[4]+mergelist[mergeindex]
-        #set second raster to mosaic as county1 variable, which will be moved to next location in list each iteration
+        #set second raster to mosaic as place variable, which will be moved to next location in list each iteration
         inras2 = newlist[place]
         #add input rasters along with ";" separator due to finicky nature of "mosaic to new raster" tool 
         finalras = inras1+";"+inras2
@@ -142,7 +142,7 @@ def backwardadjustment():
         print "Finished doing backward adjustment, created new " + str(count) + " raster"
         #append output to first location in mergelist to use in next iteration
         mergelist.insert(0, name)
-        #add 1 to county and count variables to move location in lists
+        #add 1 to place and count variables to move location in lists
         count = count - 1      
         place = place + 1 
         print "This is the merge list: " + str(mergelist)
@@ -166,7 +166,7 @@ def forwardadjustment():
     while count < 2010:
         #set first raster to mosaic to the first raster in mergelist
         inras1 = filelist[5]+mergelist[mergeindex]
-        #set second raster to mosaic as county1 variable, which will be moved to next location in list each iteration
+        #set second raster to mosaic as place variable, which will be moved to next location in list each iteration
         inras2 = ras_list[place]
         #add input rasters along with ";" separator due to finicky nature of "mosaic to new raster" tool 
         finalras = inras1+";"+inras2
@@ -180,7 +180,7 @@ def forwardadjustment():
         print "finished merging datasets, created new " + str(count) + " raster"
         #append output to first location in mergelist to use in next iteration
         mergelist.insert(0, name)
-        #add 1 to county and count variables to move location in lists
+        #add 1 to place and count variables to move location in lists
         count = count + 1      
         place = place + 1 
   
